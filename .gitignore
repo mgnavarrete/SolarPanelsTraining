@@ -1,0 +1,6 @@
+# Ignore all .png and .txt files within the "dataset" directory and subdirectories
+dataset/**/*.png
+dataset/**/*.txt
+dataset/**/**/*.png
+dataset/**/**/*.txt
+
