@@ -14,7 +14,11 @@ for label in tqdm(labels, desc="Dividiendo Imagenes"):
         for line in lines:
             class_id = int(line.split()[0])
             # guardar linea en archivo correspondiente junto con la imagen
-            with open("dataset/classes/" + str(class_id) + "/labels/" + filename + ".txt", "a") as newfile:
-                newfile.write(line)
-            shutil.copy(imagesPATH + "/" + filename + ".JPG", "dataset/classes/" + str(class_id) + "/images/" + filename + ".jpg")    
+            try:
+                shutil.copy(imagesPATH + "/" + filename + ".JPG", "dataset/classes/" + str(class_id) + "/images/" + filename + ".jpg")  
+                with open("dataset/classes/" + str(class_id) + "/labels/" + filename + ".txt", "a") as newfile:
+                    newfile.write(line)
+            except:
+                print("No se encontro la imagen " + filename + ".JPG")
+              
         file.close()
