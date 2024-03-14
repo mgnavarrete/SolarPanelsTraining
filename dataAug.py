@@ -25,18 +25,22 @@ def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
 
     return f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
 
-def adjust_label_for_rotation(label_line, image_width, image_height):
+def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     parts = label_line.split()
-    class_id, x_center, y_center, width, height = parts
-    x_center, y_center, width, height = map(float, [x_center, y_center, width, height])
+    class_id = parts[0]
+    x_center = float(parts[1])
+    y_center = float(parts[2])
+    width = float(parts[3])
+    height = float(parts[4])
 
-    # Assuming 90-degree rotation
-    new_x_center = y_center
-    new_y_center = 1 - x_center
-    new_width = height
-    new_height = width
+    if flip_type == 'horizontal':
+        x_center = 1 - x_center
+    elif flip_type == 'vertical':
+        y_center = 1 - y_center
 
-    return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {new_width:.6f} {new_height:.6f}\n"
+    # Ensure that the format is applied to float values
+    return f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
+
 
 def apply_augmentations(image, original_labels, num_augmentations, image_idx, images_path, labels_path, file_name):
     augmented_images_info = []
