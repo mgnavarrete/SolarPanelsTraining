@@ -1,11 +1,12 @@
 import os
 import shutil
+from tqdm import tqdm
 labelsPATH = "dataset/allData/labels"
 imagesPATH = "dataset/allData/images"
 
 labels = os.listdir(labelsPATH)
 
-for label in labels:
+for label in tqdm(labels, desc="Dividiendo Imagenes"):
     filename = label.split(".")[0]
     
     with open(labelsPATH + "/" + label, "r") as file:
