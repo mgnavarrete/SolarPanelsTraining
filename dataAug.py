@@ -14,27 +14,29 @@ def select_directories():
         raise Exception("No se seleccionó ningún directorio")
     return list_folders
 
-def adjust_label_for_flip(label_line, flip_type):
+def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     parts = label_line.split()
-    class_id, x_center, y_center, width, height = parts
-    x_center, y_center = map(float, [x_center, y_center])
+    class_id = parts[0]
+    x_center = float(parts[1])
+    y_center = float(parts[2])
 
     if flip_type == 'horizontal':
         x_center = 1 - x_center
     elif flip_type == 'vertical':
         y_center = 1 - y_center
 
-    return f"{class_id} {x_center:.6f} {y_center:.6f} {width} {height}\n"
+    return f"{class_id} {x_center:.6f} {y_center:.6f} {parts[3]} {parts[4]}\n"
 
-def adjust_label_for_rotation(label_line, image_shape):
+def adjust_label_for_rotation(label_line, image_width, image_height):
     parts = label_line.split()
-    class_id, x_center, y_center, width, height = parts
-    x_center, y_center = map(float, [x_center, y_center])
+    class_id, x_center, y_center, width, height = map(float, parts[1:])
 
-    new_x_center = y_center
-    new_y_center = 1 - x_center
+    new_x_center = y_center / image_height
+    new_y_center = 1 - x_center / image_width
+    new_width = height / image_height
+    new_height = width / image_width
 
-    return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {height} {width}\n"
+    return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {new_width:.6f} {new_height:.6f}\n"
 
 def apply_random_augmentations(image, image_float, num_augmentations, image_idx, file_name, images_path, labels_path, original_labels):
     augmented_images_info = []
@@ -51,31 +53,30 @@ def apply_random_augmentations(image, image_float, num_augmentations, image_idx,
         'zoom': ('non-spatial', lambda img: tf.image.resize(tf.image.central_crop(img, central_fraction=0.8), tf.shape(img)[:2]))
     }
 
+    image_shape = tf.shape(image_float)
+    image_width, image_height = image_shape[2], image_shape[1]  # Note: image_shape = [batch, height, width, channels]
+
     for i in range(num_augmentations):
         selected_augmentations = random.sample(list(augmentations.keys()), k=random.randint(1, len(augmentations)))
         current_image = image_float
-        # Initialize adjusted_labels at the start of each augmentation iteration
         adjusted_labels = original_labels.copy()
 
         for aug in selected_augmentations:
             aug_type, aug_func = augmentations[aug]
             current_image = aug_func(current_image)
 
-            # Update adjusted_labels only if the augmentation is spatial
             if aug_type == 'spatial':
                 if aug == 'horizontal_flip':
-                    adjusted_labels = [adjust_label_for_flip(label, 'horizontal', tf.shape(current_image)[1], tf.shape(current_image)[0]) for label in adjusted_labels]
+                    adjusted_labels = [adjust_label_for_flip(label, 'horizontal', image_width, image_height) for label in adjusted_labels]
                 elif aug == 'vertical_flip':
-                    adjusted_labels = [adjust_label_for_flip(label, 'vertical', tf.shape(current_image)[1], tf.shape(current_image)[0]) for label in adjusted_labels]
+                    adjusted_labels = [adjust_label_for_flip(label, 'vertical', image_width, image_height) for label in adjusted_labels]
                 elif aug == 'rotate':
-                    adjusted_labels = [adjust_label_for_rotation(label, tf.shape(current_image)) for label in adjusted_labels]
+                    adjusted_labels = [adjust_label_for_rotation(label, image_width, image_height) for label in adjusted_labels]
 
-        # Ensure image is uint8 before saving
-        if current_image.dtype != tf.uint8:
-            current_image = tf.image.convert_image_dtype(current_image, tf.uint8)
+        current_image_uint8 = tf.image.convert_image_dtype(current_image, tf.uint8)
 
         augmented_image_path = os.path.join(images_path, f"{file_name}_aug_{image_idx}_{i}.JPG")
-        tf.io.write_file(augmented_image_path, tf.image.encode_jpeg(current_image))
+        tf.io.write_file(augmented_image_path, tf.image.encode_jpeg(current_image_uint8))
 
         augmented_label_path = os.path.join(labels_path, f"{file_name}_aug_{image_idx}_{i}.txt")
         with open(augmented_label_path, "w") as label_file:
