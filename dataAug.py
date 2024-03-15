@@ -17,7 +17,7 @@ def select_directories():
 def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     parts = label_line.strip().split()
     if len(parts) != 5:
-        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)} in '{label_line}'")
+        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)}")
     class_id, x_center, y_center, width, height = parts
     x_center, y_center = float(x_center), float(y_center)
 
@@ -31,7 +31,7 @@ def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
 def adjust_label_for_rotation(label_line, image_width, image_height):
     parts = label_line.strip().split()
     if len(parts) != 5:
-        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)} in '{label_line}'")
+        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)}")
     class_id, x_center, y_center, width, height = map(float, parts[1:])
 
     new_x_center = y_center
