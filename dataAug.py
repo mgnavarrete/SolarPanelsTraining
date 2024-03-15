@@ -13,17 +13,19 @@ def select_directories():
         raise Exception("No se seleccionó ningún directorio")
     return list_folders
 
-def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
+def adjust_label_for_rotation(label_line, image_width, image_height):
     parts = label_line.split()
     class_id, x_center, y_center, width, height = parts
-    x_center, y_center = map(float, [x_center, y_center])
+    x_center, y_center, width, height = map(float, [x_center, y_center, width, height])
 
-    if flip_type == 'horizontal':
-        x_center = 1 - x_center
-    elif flip_type == 'vertical':
-        y_center = 1 - y_center
+    # Assuming 90-degree rotation
+    new_x_center = y_center
+    new_y_center = 1 - x_center
+    new_width = height
+    new_height = width
+    
+    return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {new_width:.6f} {new_height:.6f}\n"
 
-    return f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
 
 def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     parts = label_line.split()
