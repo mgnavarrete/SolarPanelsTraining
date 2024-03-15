@@ -54,7 +54,6 @@ def apply_random_augmentations(image, image_float, num_augmentations, image_idx,
     for i in range(num_augmentations):
         selected_augmentations = random.sample(list(augmentations.keys()), k=random.randint(1, len(augmentations)))
         current_image = image_float
-        adjusted_labels = original_labels.copy()
 
         for aug in selected_augmentations:
             aug_type, aug_func = augmentations[aug]
@@ -62,14 +61,15 @@ def apply_random_augmentations(image, image_float, num_augmentations, image_idx,
 
             if aug_type == 'spatial':
                 if aug == 'horizontal_flip':
-                    adjusted_labels = [adjust_label_for_flip(label, 'horizontal') for label in adjusted_labels]
+                    adjusted_labels = [adjust_label_for_flip(label, 'horizontal', tf.shape(image)[1], tf.shape(image)[0]) for label in adjusted_labels]
                 elif aug == 'vertical_flip':
-                    adjusted_labels = [adjust_label_for_flip(label, 'vertical') for label in adjusted_labels]
+                    adjusted_labels = [adjust_label_for_flip(label, 'vertical', tf.shape(image)[1], tf.shape(image)[0]) for label in adjusted_labels]
                 elif aug == 'rotate':
                     adjusted_labels = [adjust_label_for_rotation(label, tf.shape(current_image)) for label in adjusted_labels]
 
-        if 'noise' in selected_augmentations or any(aug in ['brightness', 'contrast', 'saturation', 'hue'] for aug in selected_augmentations):
-            current_image = tf.image.convert_image_dtype(current_image, tf.uint8)
+        # Ensure the image tensor is uint8 before encoding to JPEG.
+        if current_image.dtype != tf.uint8:
+            current_image = tf.image.convert_image_dtype(current_image, tf.uint8, saturate=True)
 
         augmented_image_path = os.path.join(images_path, f"{file_name}_aug_{image_idx}_{i}.JPG")
         tf.io.write_file(augmented_image_path, tf.image.encode_jpeg(current_image))
