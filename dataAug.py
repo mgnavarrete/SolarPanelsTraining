@@ -26,7 +26,6 @@ def adjust_label_for_rotation(label_line, image_width, image_height):
     
     return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {new_width:.6f} {new_height:.6f}\n"
 
-
 def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     parts = label_line.split()
     class_id = parts[0]
@@ -40,30 +39,34 @@ def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
     elif flip_type == 'vertical':
         y_center = 1 - y_center
 
-    # Ensure that the format is applied to float values
     return f"{class_id} {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f}\n"
-
 
 def apply_augmentations(image, original_labels, num_augmentations, image_idx, images_path, labels_path, file_name):
     augmented_images_info = []
 
-    # Define your augmentations here
+    # Convert image to float32 for augmentation
+    image_float = tf.image.convert_image_dtype(image, tf.float32)
+
+    # Define augmentations here
     augmentations = [
         ('horizontal_flip', lambda img: tf.image.flip_left_right(img)),
         ('vertical_flip', lambda img: tf.image.flip_up_down(img)),
         ('rotate', lambda img: tf.image.rot90(img)),
-        # Other non-spatial transformations don't need label adjustments
         ('brightness', lambda img: tf.image.random_brightness(img, max_delta=0.3)),
         ('contrast', lambda img: tf.image.random_contrast(img, lower=0.8, upper=1.2)),
         ('saturation', lambda img: tf.image.random_saturation(img, lower=0.8, upper=1.2)),
         ('hue', lambda img: tf.image.random_hue(img, max_delta=0.04)),
-        ('noise', lambda img: tf.clip_by_value(tf.add(img, tf.random.normal(tf.shape(img), mean=0.0, stddev=0.05)), 0.0, 1.0)),
+        ('noise', lambda img: tf.clip_by_value(img + tf.random.normal(tf.shape(img), mean=0.0, stddev=0.05), 0.0, 1.0)),
         ('zoom', lambda img: tf.image.resize(tf.image.central_crop(img, central_fraction=0.8), tf.shape(img)[:2]))
     ]
 
     for i, (aug_name, aug_func) in enumerate(augmentations):
         # Apply augmentation
-        aug_image = aug_func(image)
+        aug_image = aug_func(image_float if aug_name != 'rotate' else image)
+
+        # Convert back to uint8
+        if aug_name != 'rotate':
+            aug_image = tf.image.convert_image_dtype(aug_image, tf.uint8)
 
         # Adjust labels for spatial transformations
         if aug_name in ['horizontal_flip', 'vertical_flip', 'rotate']:
