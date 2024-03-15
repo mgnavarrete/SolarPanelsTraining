@@ -15,26 +15,29 @@ def select_directories():
     return list_folders
 
 def adjust_label_for_flip(label_line, flip_type, image_width, image_height):
-    parts = label_line.split()
-    class_id = parts[0]
-    x_center = float(parts[1])
-    y_center = float(parts[2])
+    parts = label_line.strip().split()
+    if len(parts) != 5:
+        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)} in '{label_line}'")
+    class_id, x_center, y_center, width, height = parts
+    x_center, y_center = float(x_center), float(y_center)
 
     if flip_type == 'horizontal':
         x_center = 1 - x_center
     elif flip_type == 'vertical':
         y_center = 1 - y_center
 
-    return f"{class_id} {x_center:.6f} {y_center:.6f} {parts[3]} {parts[4]}\n"
+    return f"{class_id} {x_center:.6f} {y_center:.6f} {width} {height}\n"
 
 def adjust_label_for_rotation(label_line, image_width, image_height):
-    parts = label_line.split()
+    parts = label_line.strip().split()
+    if len(parts) != 5:
+        raise ValueError(f"Label format error: expected 5 parts, got {len(parts)} in '{label_line}'")
     class_id, x_center, y_center, width, height = map(float, parts[1:])
 
-    new_x_center = y_center / image_height
-    new_y_center = 1 - x_center / image_width
-    new_width = height / image_height
-    new_height = width / image_width
+    new_x_center = y_center
+    new_y_center = 1 - x_center
+    new_width = height
+    new_height = width
 
     return f"{class_id} {new_x_center:.6f} {new_y_center:.6f} {new_width:.6f} {new_height:.6f}\n"
 
@@ -54,7 +57,7 @@ def apply_random_augmentations(image, image_float, num_augmentations, image_idx,
     }
 
     image_shape = tf.shape(image_float)
-    image_width, image_height = image_shape[2], image_shape[1]  # Note: image_shape = [batch, height, width, channels]
+    image_width, image_height = image_shape[2], image_shape[1]
 
     for i in range(num_augmentations):
         selected_augmentations = random.sample(list(augmentations.keys()), k=random.randint(1, len(augmentations)))
