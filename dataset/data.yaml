@@ -1,6 +1,6 @@
-train: train/images
-val: valid/images
-test: test/images
+train: dataset/train.txt
+val: dataset/val.txt
+test: dataset/test.txt
 
 nc: 9
 # Classes
