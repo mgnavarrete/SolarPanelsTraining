@@ -1,7 +1,7 @@
 import os
 
 # Ruta base donde se encuentran las carpetas de clases
-base_path = 'classes/'
+base_path = 'dataset/classes/'
 
 # Iterar sobre cada carpeta de clase en el directorio base
 for class_folder in os.listdir(base_path):
