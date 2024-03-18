@@ -5,7 +5,7 @@ def generate_dataset_files(base_dir):
     val_files = []
     test_files = []
 
-    class_dirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d))]
+    class_dirs = [d for d in os.listdir(base_dir) if os.path.isdir(os.path.join(base_dir, d)) and d in selected_classes]
 
     for class_dir in class_dirs:
         # Agregar las rutas de las imágenes de cada conjunto
@@ -36,5 +36,6 @@ def generate_dataset_files(base_dir):
             f.write("%s\n" % item)
 
 # Ruta al directorio base donde se almacenan las clases
-base_dir = 'classes'
-generate_dataset_files(base_dir)
+base_dir = 'dataset/classes'
+selected_classes = ['0', '1', '2', '3', '4', '5', '7', '8']
+generate_dataset_files(base_dir, selected_classes)
