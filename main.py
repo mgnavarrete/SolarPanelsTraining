@@ -4,7 +4,7 @@ import os
 import subprocess
 
 # Configura tus rutas y parámetros aquí
-yolov7_repo_path = '/path/to/yolov7'  # Actualiza esto con la ruta al repositorio de YOLOv7
+yolov7_repo_path = 'yolov7'  # Actualiza esto con la ruta al repositorio de YOLOv7
 data_yaml_path = 'dataset/data.yaml'  # Actualiza esto con la ruta a tu archivo YAML
 weights_path = 'yolov7.pt'  # O cualquier otro archivo de pesos inicial que quieras usar
 img_size = 640
