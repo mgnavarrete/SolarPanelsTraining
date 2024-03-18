@@ -10,7 +10,7 @@ weights_path = 'yolov7.pt'  # O cualquier otro archivo de pesos inicial que quie
 img_size = 640
 batch_size = 8
 epochs = 10
-name = 'yolov7_custom'
+name = 'SolarFailuresDetection'
 
 # Cambia al directorio de YOLOv7
 os.chdir(yolov7_repo_path)
