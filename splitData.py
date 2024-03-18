@@ -37,5 +37,5 @@ def split_data(base_dir, selected_classes, train_size=0.7, val_size=0.15, test_s
         move_files(test_labels, labels_dir, os.path.join(base_dir, class_dir, 'test', 'labels'))
 
 selected_classes = [1, 7, 8]  # Las clases que quieres procesar
-base_dir = 'classes'  # Path to the base directory
+base_dir = 'dataset/classes'  # Path to the base directory
 split_data(base_dir, selected_classes)
