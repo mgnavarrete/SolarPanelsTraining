@@ -35,5 +35,5 @@ def split_data(base_dir, train_size=0.7, val_size=0.15, test_size=0.15):
         move_files(val_labels, labels_dir, os.path.join(base_dir, class_dir, 'val', 'labels'))
         move_files(test_labels, labels_dir, os.path.join(base_dir, class_dir, 'test', 'labels'))
 
-base_dir = 'classes'  # Path to the base directory
+base_dir = 'dataset/classes'  # Path to the base directory
 split_data(base_dir)
