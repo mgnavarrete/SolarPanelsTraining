@@ -18,22 +18,22 @@ def split_data(base_dir, train_size=0.7, val_size=0.15, test_size=0.15):
         train_images, test_images, train_labels, test_labels = train_test_split(images, labels, train_size=train_size + val_size, test_size=test_size, random_state=42)
         val_images, train_images, val_labels, train_labels = train_test_split(train_images, train_labels, train_size=(train_size / (train_size + val_size)), test_size=(val_size / (train_size + val_size)), random_state=42)
         
-        # Function to copy files
-        def copy_files(files, source_dir, destination_dir):
+        # Function to move files
+        def move_files(files, source_dir, destination_dir):
             for f in files:
-                shutil.copy(os.path.join(source_dir, f), os.path.join(destination_dir, f))
+                shutil.move(os.path.join(source_dir, f), os.path.join(destination_dir, f))
 
-        # Creating subdirectories and copying files
+        # Creating subdirectories and moving files
         for phase in ['train', 'val', 'test']:
             os.makedirs(os.path.join(base_dir, class_dir, phase, 'images'), exist_ok=True)
             os.makedirs(os.path.join(base_dir, class_dir, phase, 'labels'), exist_ok=True)
         
-        copy_files(train_images, images_dir, os.path.join(base_dir, class_dir, 'train', 'images'))
-        copy_files(val_images, images_dir, os.path.join(base_dir, class_dir, 'val', 'images'))
-        copy_files(test_images, images_dir, os.path.join(base_dir, class_dir, 'test', 'images'))
-        copy_files(train_labels, labels_dir, os.path.join(base_dir, class_dir, 'train', 'labels'))
-        copy_files(val_labels, labels_dir, os.path.join(base_dir, class_dir, 'val', 'labels'))
-        copy_files(test_labels, labels_dir, os.path.join(base_dir, class_dir, 'test', 'labels'))
+        move_files(train_images, images_dir, os.path.join(base_dir, class_dir, 'train', 'images'))
+        move_files(val_images, images_dir, os.path.join(base_dir, class_dir, 'val', 'images'))
+        move_files(test_images, images_dir, os.path.join(base_dir, class_dir, 'test', 'images'))
+        move_files(train_labels, labels_dir, os.path.join(base_dir, class_dir, 'train', 'labels'))
+        move_files(val_labels, labels_dir, os.path.join(base_dir, class_dir, 'val', 'labels'))
+        move_files(test_labels, labels_dir, os.path.join(base_dir, class_dir, 'test', 'labels'))
 
 base_dir = 'classes'  # Path to the base directory
 split_data(base_dir)
