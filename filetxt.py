@@ -1,6 +1,6 @@
 import os
 
-def generate_dataset_files(base_dir):
+def generate_dataset_files(base_dir, selected_classes):
     train_files = []
     val_files = []
     test_files = []
