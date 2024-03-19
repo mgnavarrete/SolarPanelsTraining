@@ -1,5 +1,7 @@
 # Solar Panels Training
 
+`.\my_yolov7_venv\Scripts\activate`
+
 ## Organización del conjunto de datos::
 
 - En la carpeta principal llamada dataset, estan las carpetas train, val, y test, que corresponden a los conjuntos de entrenamiento, validación y prueba, respectivamente. En cada una de las subcarpetas (train, val, test), existen dos carpetas más images y labels.
