@@ -1,5 +1,8 @@
 import os
 import subprocess
+import git
+print("Successful import of git:", git.__version__)
+
 
 # Configura tus rutas y parámetros aquí
 yolov5_repo_path = 'yolov5'  # Asegúrate de que esta sea la ruta al repositorio de YOLOv5
