@@ -1,0 +1,11 @@
+General (all): Estos resultados representan el rendimiento general del modelo en todas las clases. Se evaluaron 23,448 imágenes con 52,514 instancias detectadas. Los valores de precisión (P), recall (R), mAP50 y mAP50-95 son indicadores clave de rendimiento:
+
+Precisión (P = 0.49): Indica la proporción de identificaciones positivas que fueron realmente correctas. Un valor de 0.49 significa que casi la mitad de las predicciones del modelo fueron acertadas.
+Recall (R = 0.277): Muestra la proporción de positivos reales que fueron identificados correctamente. Un valor de 0.277 sugiere que el modelo detectó aproximadamente el 28% de todos los posibles positivos.
+mAP50 (0.209): Es el promedio de precisión promedio (mean Average Precision) al umbral del 50% de IoU (Intersección sobre Unión). Este valor indica que, en promedio, la precisión del modelo es del 20.9% cuando se aplica un umbral del 50%.
+mAP50-95 (0.12): Es una métrica más exigente que promedia el mAP desde un IoU del 50% hasta el 95%, mostrando un rendimiento general más bajo.
+Resultados por categoría: Cada fila subsiguiente muestra métricas para categorías específicas detectadas, como distintos tipos de defectos o características en las imágenes:
+
+Por ejemplo, la categoría "Tipo IV - BusBar" tuvo un alto desempeño en términos de recall (0.741) y mAP50 (0.578), indicando que el modelo fue particularmente eficaz en detectar e identificar este tipo de objeto.
+En contraste, "Tipo IX - JunctionBoxCaliente" mostró valores muy bajos en precisión y recall (ambos 0), lo que indica una efectividad nula del modelo para esta categoría específica.
+Casos extremos: Las categorías "Tipo II - StringCortoCircuito" y "Tipo VIII - PID" muestran situaciones extremas donde, aunque la precisión fue perfecta (1.0) para "Tipo II", su recall fue 0, indicando que no detectó ninguna instancia real correctamente. Similarmente, "Tipo VIII - PID" tuvo solo dos instancias para evaluar, lo que no proporciona una base estadística sólida para juzgar el rendimiento.
