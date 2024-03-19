@@ -9,8 +9,6 @@ img_size = 640  # Tamaño de imagen utilizado durante el entrenamiento.
 iou_threshold = 0.5  # Umbral de IoU para considerar predicciones correctas.
 conf_threshold = 0.001  # Umbral de confianza para considerar detecciones.
 results_name = 'test_results'  # Nombre del directorio de resultados.
-cum_counts = np.cumsum(np.greater(counts.astype(np.float32), 0).astype(np.int32))
-
 
 
 os.chdir(yolov7_repo_path)
