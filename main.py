@@ -3,33 +3,40 @@ import subprocess
 
 # Configura tus rutas y parámetros aquí
 yolov5_repo_path = 'yolov5'  # Asegúrate de que esta sea la ruta al repositorio de YOLOv5
-data_yaml_path = '../dataset/data.yaml'  # Asegúrate de que esta sea la ruta a tu archivo YAML
+data_yaml_path = 'dataset/data.yaml'  # Ruta relativa al archivo YAML desde la carpeta yolov5
 img_size = 640
 batch_size = 8
 epochs = 10
 name = 'SolarFailuresDetection'
 
+# Verifica si el repositorio de YOLOv5 ya está clonado; de lo contrario, clónalo
+if not os.path.exists(yolov5_repo_path):
+    print("Clonando el repositorio YOLOv5...")
+    subprocess.run(['git', 'clone', 'https://github.com/ultralytics/yolov5.git'])
+    print("Repositorio YOLOv5 clonado correctamente.")
+
 # Cambia al directorio de YOLOv5
 os.chdir(yolov5_repo_path)
 
-# Comando para entrenar YOLOv5 sin pesos preentrenados
+# Instala las dependencias de YOLOv5
+print("Instalando dependencias requeridas para YOLOv5...")
+subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
+
+# Construye el comando para entrenar el modelo
 train_command = [
     'python', 'train.py',
-    '--batch', str(batch_size),
-    '--cfg', 'models/yolov5s.yaml',  # Ajusta según la configuración deseada
-    '--epochs', str(epochs),
-    '--data', data_yaml_path,
-    '--weights', '',  # Deja esta cadena vacía para entrenar desde cero
     '--img', str(img_size),
+    '--batch', str(batch_size),
+    '--epochs', str(epochs),
+    '--data', os.path.join('..', data_yaml_path),
     '--name', name,
-    '--cache'  # Opcional: activa el caché de imágenes para entrenamientos más rápidos
+    '--weights', 'yolov5s.pt'  # Usa pesos preentrenados; ajusta según necesidad
 ]
 
-# Ejecutar el comando de entrenamiento y capturar la salida
-result = subprocess.run(train_command)
+# Ejecuta el entrenamiento
+print(f"Iniciando el entrenamiento de YOLOv5 para {name}...")
+subprocess.run(train_command)
 
-# Verificar y manejar errores si los hay
-if result.returncode != 0:
-    print("Error en el entrenamiento:", result.stderr)
-else:
-    print("Entrenamiento completado exitosamente. Salida:", result.stdout)
+# Vuelve al directorio original
+os.chdir('..')
+print("Entrenamiento completado.")
