@@ -1,5 +1,3 @@
-# Asegúrate de que este script se ejecute en el entorno donde YOLOv7 está clonado y configurado.
-
 import os
 import subprocess
 
@@ -27,13 +25,9 @@ train_command = [
     '--name', name
 ]
 
-# Ejecutar el comando de entrenamiento
-result = subprocess.run(train_command, capture_output=True, text=True)
-
-# Imprimir la salida del comando de entrenamiento
-print(result.stdout)
+# Ejecutar el comando de entrenamiento y mostrar la salida directamente
+result = subprocess.run(train_command)
 
 # Verificar y manejar errores si los hay
 if result.returncode != 0:
-    print("Error en el entrenamiento:")
-    print(result.stderr)
+    print("Error en el entrenamiento:", result.returncode)
