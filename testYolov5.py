@@ -3,7 +3,7 @@ import os
 
 # Configura las rutas y parámetros necesarios
 yolov5_repo_path = 'yolov5'  # Asegúrate de ajustar esta ruta al directorio de YOLOv5
-weights_path = '../oldModels/best_08_06.pt'  # Ruta al archivo de pesos del modelo.
+weights_path = '../oldModels/best_202309_20epoch.pt'  # Ruta al archivo de pesos del modelo.
 data_yaml_path = '../dataset/data.yaml'  # Ruta al archivo YAML de configuración de los datos.
 img_size = 640  # Tamaño de imagen utilizado durante el entrenamiento.
 iou_threshold = 0.5  # Umbral de IoU para considerar predicciones correctas.
