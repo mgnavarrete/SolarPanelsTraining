@@ -1,5 +1,5 @@
 import subprocess
-
+import os
 # Configura las rutas y parámetros necesarios
 yolov7_repo_path = 'yolov7' 
 weights_path = 'best.pt'  # Ruta al archivo de pesos del modelo.
