@@ -27,6 +27,10 @@ train_command = [
 
 # Ejecutar el comando de entrenamiento y mostrar la salida directamente
 result = subprocess.run(train_command)
+# Ejecutar el comando
+
+print("STDOUT:", result.stdout)
+print("STDERR:", result.stderr)
 
 # Verificar y manejar errores si los hay
 if result.returncode != 0:
