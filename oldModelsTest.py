@@ -15,7 +15,7 @@ os.chdir(yolov7_repo_path)
 
 # Comando para ejecutar la evaluación
 command = [
-    'python', 'val.py',
+    'python', 'test.py',
     '--weights', weights_path,
     '--data', data_yaml_path,
     '--task', 'test',
