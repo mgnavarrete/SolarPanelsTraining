@@ -12,18 +12,10 @@ batch_size = 8
 epochs = 10
 name = 'SolarFailuresDetection'
 
-# Verifica si el repositorio de YOLOv5 ya está clonado; de lo contrario, clónalo
-if not os.path.exists(yolov5_repo_path):
-    print("Clonando el repositorio YOLOv5...")
-    subprocess.run(['git', 'clone', 'https://github.com/ultralytics/yolov5.git'])
-    print("Repositorio YOLOv5 clonado correctamente.")
 
 # Cambia al directorio de YOLOv5
 os.chdir(yolov5_repo_path)
 
-# Instala las dependencias de YOLOv5
-print("Instalando dependencias requeridas para YOLOv5...")
-subprocess.run(['pip', 'install', '-r', 'requirements.txt'])
 
 # Construye el comando para entrenar el modelo
 train_command = [
@@ -33,7 +25,7 @@ train_command = [
     '--epochs', str(epochs),
     '--data', os.path.join('..', data_yaml_path),
     '--name', name,
-    '--weights', 'yolov5s.pt'  # Usa pesos preentrenados; ajusta según necesidad
+    '--weights', '../oldModels/best_08_06.pt'  # Usa pesos preentrenados; ajusta según necesidad
 ]
 
 # Ejecuta el entrenamiento
