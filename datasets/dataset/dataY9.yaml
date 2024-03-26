@@ -1,6 +1,6 @@
-train: train.txt
-val: val.txt
-test: test.txt
+train: datasets/dataset/train.txt
+val: datasets/dataset/val.txt
+test: datasets/dataset/test.txt
 
 nc: 9
 # Classes
